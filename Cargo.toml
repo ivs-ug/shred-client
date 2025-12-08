@@ -10,7 +10,7 @@ prost = "0.14.1"
 serde = { version = "1.0.228", features = ["derive"] }
 solana-hash = { version = "4.0.1", features = ["serde"] }
 solana-message = "3.0.1"
-solana-transaction = { version = "3.0.2", features = ["serde"] }
+solana-transaction = { version = "~3.0", features = ["serde"] }
 tokio = { version = "1.48.0", features = ["full"] }
 tonic = "0.14.1"
 tonic-prost = "0.14.1"
