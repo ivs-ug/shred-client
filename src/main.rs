@@ -25,7 +25,7 @@ async fn main() -> Result<()> {
 
     info!("Receiving transactions...");
 
-    while let Some(tx) = rx.recv().await {
+    while let Some((_slot, tx)) = rx.recv().await {
         tx_count += 1;
 
         // Print transaction signature

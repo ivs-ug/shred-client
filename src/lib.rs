@@ -40,7 +40,7 @@ pub struct Entry {
 pub async fn subscribe(
     url: impl AsRef<str>,
     buffer_size: usize,
-) -> Result<mpsc::Receiver<VersionedTransaction>> {
+) -> Result<mpsc::Receiver<(u64, VersionedTransaction)>> {
     let url = url.as_ref().to_string();
     let (tx, rx) = mpsc::channel(buffer_size);
 
@@ -55,7 +55,7 @@ pub async fn subscribe(
 
 async fn subscribe_loop(
     url: String,
-    tx: mpsc::Sender<VersionedTransaction>,
+    tx: mpsc::Sender<(u64, VersionedTransaction)>,
 ) -> Result<()> {
     loop {
         info!("Connecting to ShredStream at {}", url);
@@ -104,7 +104,7 @@ async fn subscribe_loop(
                     // Stream all transactions to channel
                     for entry in entries {
                         for transaction in entry.transactions {
-                            if tx.send(transaction).await.is_err() {
+                            if tx.send((slot_entry.slot, transaction)).await.is_err() {
                                 // Receiver dropped, exit gracefully
                                 info!("Receiver dropped, stopping ShredStream subscription");
                                 return Ok(());
